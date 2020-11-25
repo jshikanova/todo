@@ -15,7 +15,6 @@ type ToDoItemProps = {
   toggleChecked: (id: number) => void;
 } & DataProps;
 
-// lala
 const TodoItem = memo(
   ({ id, title, completed, deleteItem, toggleChecked }: ToDoItemProps) => {
     const idString = id.toString();
