@@ -1,0 +1,26 @@
+.list {
+  width: 100%;
+  list-style-type: none;
+  padding: 0;
+}
+
+.list__item {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 8px;
+  border-radius: 4px;
+
+  &:nth-child(odd) {
+    background: #303030;
+  }
+}
+
+.list__checkbox {
+  margin-right: 16px;
+
+  &:checked + .list__label {
+    text-decoration: line-through;
+    color: #9c9c9c;
+  }
+}

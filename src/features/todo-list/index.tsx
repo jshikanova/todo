@@ -2,6 +2,7 @@ import React, { useCallback, FC } from 'react';
 
 import type { DataProps } from '../../types';
 import { TodoItem } from './todo-item';
+import './style.scss';
 
 type TodoListProps = {
   todos: DataProps[];

@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import qs from 'qs';
-import './App.css';
+import './style.scss';
 
 import type { DataProps } from './types';
 import { useFetch } from './helpers';
-import { AddItem, TodoList } from './features';
+import { AddItem, TodoList, LoadingSpinner } from './features';
 
 const userId = 1;
 
@@ -39,10 +39,10 @@ const App = () => {
   return (
     <div className="container">
       {loading ? (
-        <h2>Loading...</h2>
+        <LoadingSpinner />
       ) : (
         <>
-          <h1>To Do List:</h1>
+          <h1 className="heading">To Do List:</h1>
           <AddItem
             todo={todo}
             setTodo={setTodo}

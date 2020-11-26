@@ -1,6 +1,8 @@
-import React, { useState, useCallback, useEffect, memo, FC } from 'react';
+import React, { useCallback, FC } from 'react';
 
 import type { DataProps } from '../../types';
+
+import './style.scss';
 
 type AddItemProps = {
   todo: DataProps;
@@ -33,7 +35,7 @@ export const AddItem: FC<AddItemProps> = ({
 
   return (
     <>
-      <h3>Add item:</h3>
+      <h2 className="heading">Add item:</h2>
       <div className="add-item">
         <input
           className="add-item__input"
@@ -43,7 +45,11 @@ export const AddItem: FC<AddItemProps> = ({
           onChange={(e) => setTodo({ ...todo, title: e.target.value })}
           onKeyDown={(e: any) => e.code === 'Enter' && addItem()}
         />
-        <button className="add-item__button" type="button" onClick={addItem}>
+        <button
+          className="button add-item__button"
+          type="button"
+          onClick={addItem}
+        >
           Add
         </button>
       </div>

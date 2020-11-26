@@ -23,9 +23,11 @@ export const TodoItem = memo(
             checked={completed}
             onChange={() => toggleChecked(id)}
           />
-          <label htmlFor={idString}>{title}</label>
+          <label className="list__label" htmlFor={idString}>
+            {title}
+          </label>
         </div>
-        <button type="button" onClick={() => deleteItem(id)}>
+        <button className="button" type="button" onClick={() => deleteItem(id)}>
           delete
         </button>
       </li>
