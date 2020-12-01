@@ -1,16 +1,15 @@
 import React, { useCallback, FC } from 'react';
 
-import type { DataProps } from '../../types';
+import type { DataProps, SetTodosProps, SetTodoProps } from '../../types';
 
 import './style.scss';
 
 type AddItemProps = {
   todo: DataProps;
-  setTodo: React.Dispatch<React.SetStateAction<DataProps>>;
   todos: DataProps[];
-  setTodos: React.Dispatch<React.SetStateAction<DataProps[]>>;
   endpoint: string;
-};
+} & SetTodosProps &
+  SetTodoProps;
 
 export const AddItem: FC<AddItemProps> = ({
   todo,
