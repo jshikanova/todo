@@ -11,3 +11,4 @@ Basic react todo project.
 - [x] Enable only one editable item at a time
 - [ ] Add editable order for items (?)
 - [ ] Add check if item's title changed
+- [ ] Disable focus on click outside the input
