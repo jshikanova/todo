@@ -6,7 +6,8 @@ Basic react todo project.
 
 ## Todo:
 
-- Utilize context / useContext
-- Add search
-- Enable only one editable item at a time
-- Add editable order for items (?)
+- [ ] Utilize context / useContext
+- [ ] Add search
+- [x] Enable only one editable item at a time
+- [ ] Add editable order for items (?)
+- [ ] Add check if item's title changed

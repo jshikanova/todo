@@ -1,4 +1,4 @@
-import React, { FC } from 'react';
+import React, { FC, useState } from 'react';
 
 import type { DataProps, SetTodosProps } from '../../types';
 import { TodoItem } from './todo-item';
@@ -10,6 +10,8 @@ type TodoListProps = {
 } & SetTodosProps;
 
 export const TodoList: FC<TodoListProps> = ({ endpoint, todos, setTodos }) => {
+  const [editableItemId, setEditableItemId] = useState<number | null>(null);
+
   return (
     <ul className="list">
       {todos.map((item) => (
@@ -19,6 +21,8 @@ export const TodoList: FC<TodoListProps> = ({ endpoint, todos, setTodos }) => {
           endpoint={endpoint}
           todos={todos}
           setTodos={setTodos}
+          editableItemId={editableItemId}
+          setEditableItemId={setEditableItemId}
         />
       ))}
     </ul>

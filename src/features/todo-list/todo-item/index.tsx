@@ -1,16 +1,27 @@
-import { memo, useCallback, useState } from 'react';
+import { memo, useCallback } from 'react';
 
 import type { DataProps, SetTodosProps } from '../../../types';
 
 type ToDoItemProps = {
   endpoint: string;
   todos: DataProps[];
+  editableItemId: number | null;
+  setEditableItemId: React.Dispatch<React.SetStateAction<number | null>>;
 } & DataProps &
   SetTodosProps;
 
 export const TodoItem = memo(
-  ({ id, title, completed, endpoint, todos, setTodos }: ToDoItemProps) => {
-    const [isEditing, setIsEditing] = useState(false);
+  ({
+    id,
+    title,
+    completed,
+    endpoint,
+    todos,
+    setTodos,
+    editableItemId,
+    setEditableItemId,
+  }: ToDoItemProps) => {
+    const isEditing = editableItemId === id;
     const idString = id.toString();
 
     const deleteItem = useCallback(() => {
@@ -56,19 +67,35 @@ export const TodoItem = memo(
       [id, setTodos],
     );
 
-    const submitEdit = useCallback(() => {
-      setIsEditing(false);
+    // TODO: Fix double fetch on edit
+    const submitEdit = useCallback(
+      (id) => {
+        setEditableItemId(null);
 
-      fetch(`${endpoint}/${id}`, {
-        method: 'PATCH',
-        body: JSON.stringify({
-          title: todos.find((item) => item.id === id)?.title,
-        }),
-        headers: {
-          'Content-type': 'application/json; charset=UTF-8',
-        },
-      }).then((response) => response.json());
-    }, [id, endpoint, todos]);
+        fetch(`${endpoint}/${id}`, {
+          method: 'PATCH',
+          body: JSON.stringify({
+            title: todos.find((item) => item.id === id)?.title,
+          }),
+          headers: {
+            'Content-type': 'application/json; charset=UTF-8',
+          },
+        }).then((response) => response.json());
+      },
+      [setEditableItemId, endpoint, todos],
+    );
+
+    const handleEditableItemId = useCallback(
+      (id) => {
+        // TODO: Fix types
+        setEditableItemId(
+          (prevState: any): any => !!prevState && submitEdit(prevState),
+        );
+
+        setTimeout(() => setEditableItemId(id));
+      },
+      [setEditableItemId, submitEdit],
+    );
 
     return (
       <li className="list__item">
@@ -87,7 +114,7 @@ export const TodoItem = memo(
               className="list__input"
               defaultValue={title}
               onChange={(e) => editItem(e.target.value)}
-              onKeyDown={(e: any) => e.code === 'Enter' && submitEdit()}
+              onKeyDown={(e: any) => e.code === 'Enter' && submitEdit(id)}
               autoFocus
             />
           ) : (
@@ -100,7 +127,9 @@ export const TodoItem = memo(
           <button
             className="list__button"
             type="button"
-            onClick={isEditing ? submitEdit : () => setIsEditing(true)}
+            onClick={
+              isEditing ? () => submitEdit(id) : () => handleEditableItemId(id)
+            }
           >
             {isEditing ? '💾' : '✏️'}
           </button>
