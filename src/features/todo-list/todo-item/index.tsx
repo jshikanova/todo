@@ -87,6 +87,8 @@ export const TodoItem = memo(
               className="list__input"
               defaultValue={title}
               onChange={(e) => editItem(e.target.value)}
+              onKeyDown={(e: any) => e.code === 'Enter' && submitEdit()}
+              autoFocus
             />
           ) : (
             <label className="list__label" htmlFor={idString}>

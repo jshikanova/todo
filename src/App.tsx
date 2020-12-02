@@ -37,22 +37,28 @@ const App = () => {
   );
 
   return (
-    <div className="container">
-      {loading ? (
-        <LoadingSpinner />
-      ) : (
-        <>
-          <h1 className="heading">To Do List:</h1>
-          <AddItem
-            todo={todo}
-            setTodo={setTodo}
-            todos={todos}
-            setTodos={setTodos}
-            endpoint={todosEndpont}
-          />
-          <TodoList endpoint={todosEndpont} todos={todos} setTodos={setTodos} />
-        </>
-      )}
+    <div className="page">
+      <div className="container">
+        {loading ? (
+          <LoadingSpinner />
+        ) : (
+          <>
+            <h1 className="heading">To Do List:</h1>
+            <AddItem
+              todo={todo}
+              setTodo={setTodo}
+              todos={todos}
+              setTodos={setTodos}
+              endpoint={todosEndpont}
+            />
+            <TodoList
+              endpoint={todosEndpont}
+              todos={todos}
+              setTodos={setTodos}
+            />
+          </>
+        )}
+      </div>
     </div>
   );
 };
