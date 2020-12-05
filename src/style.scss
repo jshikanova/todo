@@ -49,3 +49,26 @@ code {
   border-radius: 4px;
   cursor: pointer;
 }
+
+.form {
+  width: 100%;
+  padding: 8px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.form__input {
+  width: 100%;
+  padding: 8px;
+  background: #303030;
+  color: #fff;
+  border: 2px solid #383838;
+  border-radius: 4px;
+}
+
+.form__button {
+  min-width: 120px;
+  margin-left: 24px;
+  font-weight: bold;
+}

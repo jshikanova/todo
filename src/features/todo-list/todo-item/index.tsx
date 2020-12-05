@@ -69,11 +69,8 @@ export const TodoItem = memo(
       [id, setTodos],
     );
 
-    // TODO: Fix double fetch on edit
     const submitEdit = useCallback(
       (id) => {
-        setEditableItemId(null);
-
         fetch(`${endpoint}/${id}`, {
           method: 'PATCH',
           body: JSON.stringify({
@@ -82,21 +79,20 @@ export const TodoItem = memo(
           headers: {
             'Content-type': 'application/json; charset=UTF-8',
           },
-        }).then((response) => response.json());
+        });
+
+        setEditableItemId(null);
       },
       [setEditableItemId, endpoint, todos],
     );
 
     const handleEditableItemId = useCallback(
       (id) => {
-        // TODO: Fix types
-        setEditableItemId(
-          (prevState: any): any => !!prevState && submitEdit(prevState),
-        );
+        !!editableItemId && submitEdit(editableItemId);
 
-        setTimeout(() => setEditableItemId(id));
+        editableItemId !== id && setEditableItemId(id);
       },
-      [setEditableItemId, submitEdit],
+      [editableItemId, setEditableItemId, submitEdit],
     );
 
     useEffect(() => {

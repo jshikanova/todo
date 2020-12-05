@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import qs from 'qs';
 import './style.scss';
 
 import type { DataProps } from './types';
 import { useFetch } from './helpers';
-import { AddItem, TodoList, LoadingSpinner } from './features';
+import { AddItem, TodoList, LoadingSpinner, SearchItem } from './features';
 
 const userId = 1;
 
@@ -16,13 +16,18 @@ const App = () => {
     `${todosEndpont}/${qs.stringify({ userId }, { addQueryPrefix: true })}`,
   );
 
-  const [todos, setTodos] = useState<DataProps[]>([]);
+  const [initialTodos, setTodos] = useState<DataProps[]>([]);
   const [todo, setTodo] = useState({
     userId: userId,
     id: 0,
     title: '',
     completed: false,
   });
+  const [search, setSearch] = useState<string>('');
+  const todos = useMemo(
+    () => initialTodos.filter(({ title }) => title.includes(search)),
+    [initialTodos, search],
+  );
 
   useEffect(() => setTodos(data), [data]);
   useEffect(
@@ -51,6 +56,7 @@ const App = () => {
               setTodos={setTodos}
               endpoint={todosEndpont}
             />
+            <SearchItem search={search} setSearch={setSearch} />
             <TodoList
               endpoint={todosEndpont}
               todos={todos}

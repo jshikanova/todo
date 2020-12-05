@@ -1,8 +1,6 @@
-import React, { useCallback, FC } from 'react';
+import { useCallback, FC } from 'react';
 
 import type { DataProps, SetTodosProps, SetTodoProps } from '../../types';
-
-import './style.scss';
 
 type AddItemProps = {
   todo: DataProps;
@@ -33,25 +31,18 @@ export const AddItem: FC<AddItemProps> = ({
   }, [endpoint, todos, todo, setTodos, setTodo]);
 
   return (
-    <>
-      <h2 className="heading">Add item:</h2>
-      <div className="add-item">
-        <input
-          className="add-item__input"
-          type="text"
-          placeholder="Set new task here"
-          value={todo.title}
-          onChange={(e) => setTodo({ ...todo, title: e.target.value })}
-          onKeyDown={(e: any) => e.code === 'Enter' && addItem()}
-        />
-        <button
-          className="button add-item__button"
-          type="button"
-          onClick={addItem}
-        >
-          Add
-        </button>
-      </div>
-    </>
+    <form className="form">
+      <input
+        className="form__input"
+        type="text"
+        placeholder="Set new task here"
+        value={todo.title}
+        onChange={(e) => setTodo({ ...todo, title: e.target.value })}
+        onKeyDown={(e: any) => e.code === 'Enter' && addItem()}
+      />
+      <button className="button form__button" type="button" onClick={addItem}>
+        Add
+      </button>
+    </form>
   );
 };
