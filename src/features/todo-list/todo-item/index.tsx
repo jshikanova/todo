@@ -1,4 +1,4 @@
-import { memo, useCallback } from 'react';
+import { memo, useCallback, useRef, useEffect } from 'react';
 
 import type { DataProps, SetTodosProps } from '../../../types';
 
@@ -21,6 +21,8 @@ export const TodoItem = memo(
     editableItemId,
     setEditableItemId,
   }: ToDoItemProps) => {
+    // TODO: Fix type
+    const ref = useRef<any>();
     const isEditing = editableItemId === id;
     const idString = id.toString();
 
@@ -97,6 +99,19 @@ export const TodoItem = memo(
       [setEditableItemId, submitEdit],
     );
 
+    useEffect(() => {
+      const handleClickOutside = (e: Event) => {
+        if (!ref.current || ref.current.contains(e.target)) return;
+
+        submitEdit(id);
+      };
+
+      document.addEventListener('mousedown', handleClickOutside);
+
+      return () =>
+        document.removeEventListener('mousedown', handleClickOutside);
+    }, [submitEdit, id]);
+
     return (
       <li className="list__item">
         <div className="list__inputs-wrapper">
@@ -111,6 +126,7 @@ export const TodoItem = memo(
           />
           {isEditing ? (
             <input
+              ref={ref}
               className="list__input"
               defaultValue={title}
               onChange={(e) => editItem(e.target.value)}
