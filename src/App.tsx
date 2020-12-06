@@ -28,6 +28,7 @@ const App = () => {
     () => initialTodos.filter(({ title }) => title.includes(search)),
     [initialTodos, search],
   );
+  const [editableItemId, setEditableItemId] = useState<number | null>(null);
 
   useEffect(() => setTodos(data), [data]);
   useEffect(
@@ -61,6 +62,8 @@ const App = () => {
               endpoint={todosEndpont}
               todos={todos}
               setTodos={setTodos}
+              editableItemId={editableItemId}
+              setEditableItemId={setEditableItemId}
             />
           </>
         )}

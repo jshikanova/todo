@@ -12,3 +12,8 @@ export type SetTodosProps = {
 export type SetTodoProps = {
   setTodo: React.Dispatch<React.SetStateAction<DataProps>>;
 };
+
+export type EditableItemIdProps = {
+  editableItemId: number | null;
+  setEditableItemId: React.Dispatch<React.SetStateAction<number | null>>;
+};

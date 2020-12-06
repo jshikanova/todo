@@ -1,14 +1,17 @@
-import { memo, useCallback, useRef, useEffect } from 'react';
+import { memo, useCallback, useRef, useEffect, useState } from 'react';
 
-import type { DataProps, SetTodosProps } from '../../../types';
+import type {
+  DataProps,
+  SetTodosProps,
+  EditableItemIdProps,
+} from '../../../types';
 
 type ToDoItemProps = {
   endpoint: string;
   todos: DataProps[];
-  editableItemId: number | null;
-  setEditableItemId: React.Dispatch<React.SetStateAction<number | null>>;
 } & DataProps &
-  SetTodosProps;
+  SetTodosProps &
+  EditableItemIdProps;
 
 export const TodoItem = memo(
   ({
@@ -23,6 +26,7 @@ export const TodoItem = memo(
   }: ToDoItemProps) => {
     // TODO: Fix type
     const ref = useRef<any>();
+    const [newTitle, setNewTltle] = useState(title);
     const isEditing = editableItemId === id;
     const idString = id.toString();
 
@@ -58,41 +62,29 @@ export const TodoItem = memo(
       );
     }, [id, todos, setTodos, endpoint]);
 
-    const editItem = useCallback(
-      (newTitle: string) => {
-        setTodos((todos) =>
-          todos.map((item) =>
-            item.id === id ? { ...item, title: newTitle } : item,
-          ),
-        );
-      },
-      [id, setTodos],
-    );
-
     const submitEdit = useCallback(
       (id) => {
-        fetch(`${endpoint}/${id}`, {
-          method: 'PATCH',
-          body: JSON.stringify({
-            title: todos.find((item) => item.id === id)?.title,
-          }),
-          headers: {
-            'Content-type': 'application/json; charset=UTF-8',
-          },
-        });
+        if (title !== newTitle) {
+          setTodos((todos) =>
+            todos.map((item) =>
+              item.id === id ? { ...item, title: newTitle } : item,
+            ),
+          );
+
+          fetch(`${endpoint}/${id}`, {
+            method: 'PATCH',
+            body: JSON.stringify({
+              title: todos.find((item) => item.id === id)?.title,
+            }),
+            headers: {
+              'Content-type': 'application/json; charset=UTF-8',
+            },
+          });
+        }
 
         setEditableItemId(null);
       },
-      [setEditableItemId, endpoint, todos],
-    );
-
-    const handleEditableItemId = useCallback(
-      (id) => {
-        !!editableItemId && submitEdit(editableItemId);
-
-        editableItemId !== id && setEditableItemId(id);
-      },
-      [editableItemId, setEditableItemId, submitEdit],
+      [title, newTitle, setTodos, endpoint, todos, setEditableItemId],
     );
 
     useEffect(() => {
@@ -102,14 +94,14 @@ export const TodoItem = memo(
         submitEdit(id);
       };
 
-      document.addEventListener('mousedown', handleClickOutside);
+      if (isEditing) document.addEventListener('mousedown', handleClickOutside);
 
       return () =>
         document.removeEventListener('mousedown', handleClickOutside);
-    }, [submitEdit, id]);
+    }, [submitEdit, isEditing, id]);
 
     return (
-      <li className="list__item">
+      <li className="list__item" ref={ref}>
         <div className="list__inputs-wrapper">
           <input
             className="list__checkbox"
@@ -122,10 +114,9 @@ export const TodoItem = memo(
           />
           {isEditing ? (
             <input
-              ref={ref}
               className="list__input"
               defaultValue={title}
-              onChange={(e) => editItem(e.target.value)}
+              onChange={(e) => setNewTltle(e.target.value)}
               onKeyDown={(e: any) => e.code === 'Enter' && submitEdit(id)}
               autoFocus
             />
@@ -140,7 +131,7 @@ export const TodoItem = memo(
             className="list__button"
             type="button"
             onClick={
-              isEditing ? () => submitEdit(id) : () => handleEditableItemId(id)
+              isEditing ? () => submitEdit(id) : () => setEditableItemId(id)
             }
           >
             {isEditing ? '💾' : '✏️'}

@@ -1,17 +1,26 @@
-import React, { FC, useState } from 'react';
+import React, { FC } from 'react';
 
-import type { DataProps, SetTodosProps } from '../../types';
+import type {
+  DataProps,
+  SetTodosProps,
+  EditableItemIdProps,
+} from '../../types';
 import { TodoItem } from './todo-item';
 import './style.scss';
 
 type TodoListProps = {
   todos: DataProps[];
   endpoint: string;
-} & SetTodosProps;
+} & SetTodosProps &
+  EditableItemIdProps;
 
-export const TodoList: FC<TodoListProps> = ({ endpoint, todos, setTodos }) => {
-  const [editableItemId, setEditableItemId] = useState<number | null>(null);
-
+export const TodoList: FC<TodoListProps> = ({
+  endpoint,
+  todos,
+  setTodos,
+  editableItemId,
+  setEditableItemId,
+}) => {
   return (
     <ul className="list">
       {todos.map((item) => (
